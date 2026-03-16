@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Land Search - LandInfoTG</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* THEME COLORS */
+:root{
+--forest-green:#2E4A23;
+--olive:#7A8450;
+--sand:#D9C7A1;
+--soft-white:#F8F4EF;
+--card-bg:#eef3e8;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,var(--sand),var(--soft-white));
+min-height:100vh;
+}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:var(--forest-green);
+color:white;
+padding:8px 12px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* LEFT IMAGE */
+.side-img img{
+height:55px;
+width:auto;
+}
+
+/* CENTER LOGO */
+.logo-area{
+flex:1;
+text-align:center;
+padding:0 5px;
+}
+
+.logo-area h2{
+font-size:20px;
+margin:0;
+}
+
+.logo-area h4{
+font-size:11px;
+margin:2px 0;
+}
+
+.tag{
+font-size:10px;
+opacity:0.8;
+}
+
+/* RIGHT IMAGE */
+.right-section{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.right-section img{
+height:55px;
+width:auto;
+}
+
+/* MAIN CARD */
+.container{
+max-width:900px;
+margin:50px auto;
+background:white;
+padding:40px;
+border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+animation:fadeIn 0.8s ease;
+}
+
+h3{
+text-align:center;
+margin-bottom:25px;
+color:var(--forest-green);
+}
+
+/* INPUTS */
+.select-box{
+width:100%;
+padding:12px;
+margin:12px 0;
+border-radius:10px;
+border:1px solid #ccc;
+transition:0.3s;
+}
+
+.select-box:focus{
+border-color:var(--olive);
+box-shadow:0 0 10px rgba(122,132,80,0.3);
+outline:none;
+}
+
+/* BUTTON */
+.search-btn{
+width:100%;
+padding:14px;
+margin-top:15px;
+background:var(--olive);
+color:white;
+border:none;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.search-btn:hover{
+background:var(--forest-green);
+}
+
+/* RESULT CARD */
+.result-card{
+margin-top:30px;
+background:var(--card-bg);
+border-radius:18px;
+padding:30px;
+display:none;
+animation:fadeIn 0.6s ease;
+}
+
+.result-title{
+font-size:20px;
+font-weight:700;
+color:var(--forest-green);
+margin-bottom:20px;
+}
+
+/* GRID OUTPUT */
+.result-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.info-box{
+background:white;
+padding:15px;
+border-radius:12px;
+box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
+
+.info-box h4{
+font-size:13px;
+color:#888;
+margin-bottom:5px;
+}
+
+.info-box p{
+font-weight:600;
+color:#333;
+}
+
+/* ANIMATION */
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:translateY(0)}
+}
+/* ================= TOGGLE BUTTON ================= */
+
+#menuToggle{
+position:fixed;
+top:20px;
+right:20px;
+font-size:26px;
+background:var(--olive);
+color:white;
+padding:8px 14px;
+border-radius:8px;
+cursor:pointer;
+z-index:15000;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+/* Hide toggle when sidebar open */
+#menuToggle.hide{
+display:none;
+}
+
+/* ================= SIDEBAR ================= */
+
+#sidebar{
+position:fixed;
+top:0;
+right:-270px;
+width:260px;
+height:100%;
+background:var(--forest-green);
+padding-top:70px;
+transition:0.4s ease;
+display:flex;
+flex-direction:column;
+z-index:20000;
+box-shadow:-5px 0 25px rgba(0,0,0,0.3);
+}
+
+#sidebar a{
+color:white;
+text-decoration:none;
+padding:15px 25px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+font-size:15px;
+transition:0.3s;
+}
+
+#sidebar a:hover{
+background:var(--olive);
+padding-left:30px;
+}
+
+/* CLOSE BUTTON */
+#closeBtn{
+position:absolute;
+top:20px;
+right:20px;
+font-size:22px;
+color:white;
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+<!-- RIGHT TOGGLE BUTTON -->
+<div id="menuToggle">☰</div>
+
+<!-- RIGHT SIDEBAR -->
+<div id="sidebar">
+  <div id="closeBtn">✖</div>
+
+  <a href="index.html">Home</a>
+  <a href="landsearch.html">Land Search</a>
+  <a href="ror.html">ROR</a>
+  <a href="ec.html">EC</a>
+  <a href="documents.html">Documents</a>
+  <a href="prohibited.html">Prohibited</a>
+  <a href="about.html">About</a>
+</div>
+<nav class="topbar">
+
+<div class="side-img">
+<img src="images (56).jpg">
+</div>
+
+<div class="logo-area">
+<h2>LandInfoTG</h2>
+<h4>ల్యాండ్ ఇన్ఫో తెలంగాణ</h4>
+<h4>लैंड इन्फो तेलंगाना</h4>
+<p class="tag">Unofficial Portal</p>
+</div>
+
+</nav>
+
+<div class="container">
+
+<h3>Search Land Records</h3>
+
+<select id="district" class="select-box"></select>
+<select id="mandal" class="select-box"></select>
+<select id="village" class="select-box"></select>
+<select id="survey" class="select-box" style="display:none;"></select>
+
+<button class="search-btn" onclick="searchLand()">Search Land</button>
+
+<div id="resultCard" class="result-card"></div>
+
+</div>
+
+<script>
+
+let allData=[];
+
+window.onload=function(){
+allData=JSON.parse(localStorage.getItem("lands"))||[];
+loadDistricts();
+};
+
+function loadDistricts(){
+let set=new Set();
+allData.forEach(i=>set.add(i.district));
+fillSelect("district",set,"Select District");
+}
+
+function fillSelect(id,data,placeholder){
+let select=document.getElementById(id);
+select.innerHTML=`<option value="">${placeholder}</option>`;
+data.forEach(val=>{
+let opt=document.createElement("option");
+opt.value=val;
+opt.text=val;
+select.add(opt);
+});
+}
+
+/* FILTER SYSTEM */
+district.onchange=function(){
+let set=new Set();
+allData.forEach(i=>{
+if(i.district===this.value) set.add(i.mandal);
+});
+fillSelect("mandal",set,"Select Mandal");
+survey.style.display="none";
+};
+
+mandal.onchange=function(){
+let set=new Set();
+allData.forEach(i=>{
+if(i.district===district.value && i.mandal===this.value)
+set.add(i.village);
+});
+fillSelect("village",set,"Select Village");
+survey.style.display="none";
+};
+
+village.onchange=function(){
+let set=new Set();
+allData.forEach(i=>{
+if(i.district===district.value &&
+i.mandal===mandal.value &&
+i.village===this.value)
+set.add(i.survey);
+});
+fillSelect("survey",set,"Select Survey No");
+survey.style.display="block";
+};
+
+function maskPPB(ppb){
+if(!ppb) return "-";
+let firstThree = ppb.toString().slice(0,3);
+let maskedPart = "X".repeat(Math.max(ppb.length - 3, 4));
+return firstThree + maskedPart;
+}
+
+/* SEARCH */
+function searchLand(){
+
+let result=allData.find(i=>
+i.district===district.value &&
+i.mandal===mandal.value &&
+i.village===village.value &&
+i.survey===survey.value
+);
+
+if(!result){
+resultCard.innerHTML="<h3>No Record Found</h3>";
+resultCard.style.display="block";
+return;
+}
+
+resultCard.innerHTML=`
+<div class="result-title">Complete Land Details</div>
+
+<div class="result-grid">
+
+<div class="info-box"><h4>District</h4><p>${result.district}</p></div>
+<div class="info-box"><h4>Mandal</h4><p>${result.mandal}</p></div>
+<div class="info-box"><h4>Village</h4><p>${result.village}</p></div>
+<div class="info-box"><h4>Survey No</h4><p>${result.survey}</p></div>
+<div class="info-box"><h4>Pattadar</h4><p>${result.pattadar}</p></div>
+<div class="info-box"><h4>Father</h4><p>${result.father}</p></div>
+<div class="info-box"><h4>PPB</h4><p>${maskPPB(result.ppb)}</p></div>
+<div class="info-box"><h4>Total Acres</h4><p>${result.acres}</p></div>
+<div class="info-box"><h4>Land Status</h4><p>${result.landStatus}</p></div>
+<div class="info-box"><h4>Land Type</h4><p>${result.landType}</p></div>
+<div class="info-box"><h4>Market Value</h4><p>${result.marketValue}</p></div>
+
+</div>
+`;
+
+resultCard.style.display="block";
+}
+/* ================= SIDEBAR TOGGLE ================= */
+
+const menuToggle = document.getElementById("menuToggle");
+const sidebar = document.getElementById("sidebar");
+const closeBtn = document.getElementById("closeBtn");
+
+menuToggle.addEventListener("click", function(){
+sidebar.style.right = "0";
+menuToggle.classList.add("hide"); // 3 lines hide
+});
+
+closeBtn.addEventListener("click", function(){
+sidebar.style.right = "-270px";
+menuToggle.classList.remove("hide"); // show again
+});
+</script>
+
+</body>
+</html>

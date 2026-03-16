@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encumbrance Certificate - LandInfoTG</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* COLOR THEME */
+:root{
+--forest-green:#2E4A23;
+--olive:#7A8450;
+--sand:#D9C7A1;
+--soft-white:#F8F4EF;
+--card-bg:#eef3e8;
+}
+
+/* RESET */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,var(--sand),var(--soft-white));
+min-height:100vh;
+}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:var(--forest-green);
+color:white;
+padding:8px 12px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+
+.side-img img,
+.right-section img{
+height:55px;
+}
+
+.logo-area{
+flex:1;
+text-align:center;
+}
+
+.logo-area h2{
+font-size:20px;
+}
+
+.logo-area h4{
+font-size:11px;
+margin:2px 0;
+}
+
+.tag{
+font-size:10px;
+opacity:0.8;
+}
+
+/* MAIN */
+.container{
+max-width:800px;
+margin:50px auto;
+background:white;
+padding:40px;
+border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+h3{
+text-align:center;
+margin-bottom:25px;
+color:var(--forest-green);
+}
+
+.select-box{
+width:100%;
+padding:12px;
+margin:12px 0;
+border-radius:10px;
+border:1px solid #ccc;
+outline:none;
+}
+
+.select-box:focus{
+border-color:var(--olive);
+}
+
+.search-btn{
+width:100%;
+padding:14px;
+margin-top:15px;
+background:var(--olive);
+color:white;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+}
+
+.search-btn:hover{
+background:var(--forest-green);
+}
+
+/* ================= RIGHT TOGGLE ================= */
+
+#menuToggle{
+position:fixed;
+top:18px;
+right:20px;
+font-size:26px;
+background:var(--olive);
+color:white;
+padding:8px 14px;
+border-radius:8px;
+cursor:pointer;
+z-index:11000; /* above everything except popup */
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+/* Hide toggle when sidebar open */
+#menuToggle.hide{
+display:none;
+}
+
+/* ================= SIDEBAR ================= */
+
+#sidebar{
+position:fixed;
+top:0;
+right:-280px;
+width:260px;
+height:100%;
+background:var(--forest-green);
+padding-top:70px;
+transition:0.4s ease;
+display:flex;
+flex-direction:column;
+z-index:11500;
+box-shadow:-5px 0 25px rgba(0,0,0,0.3);
+}
+
+#sidebar a{
+color:white;
+text-decoration:none;
+padding:16px 25px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+font-size:15px;
+transition:0.3s;
+}
+
+#sidebar a:hover{
+background:var(--olive);
+padding-left:30px;
+}
+
+/* CLOSE BUTTON */
+
+#closeBtn{
+position:absolute;
+top:18px;
+right:20px;
+font-size:22px;
+color:white;
+cursor:pointer;
+z-index:12000;
+}
+.result{
+margin-top:25px;
+padding:25px;
+background:var(--card-bg);
+border-radius:15px;
+display:none;
+}
+
+/* LOGIN */
+#loginOverlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.login-box{
+background:white;
+padding:30px;
+border-radius:15px;
+width:350px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* POPUP */
+#downloadPopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.popup-box{
+background:white;
+padding:30px;
+border-radius:15px;
+text-align:center;
+width:350px;
+}
+
+.loader{
+margin:20px auto;
+width:45px;
+height:45px;
+border:5px solid #eee;
+border-top:5px solid var(--olive);
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+100%{transform:rotate(360deg)}
+}
+
+.tick{
+font-size:50px;
+color:var(--forest-green);
+display:none;
+margin:15px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- RIGHT TOGGLE BUTTON -->
+<div id="menuToggle">☰</div>
+
+<!-- RIGHT SIDEBAR -->
+<div id="sidebar">
+  <div id="closeBtn">✖</div>
+
+  <a href="index.html">Home</a>
+  <a href="landsearch.html">Land Search</a>
+  <a href="ror.html">ROR</a>
+  <a href="ec.html">EC</a>
+  <a href="documents.html">Documents</a>
+  <a href="prohibited.html">Prohibited</a>
+  <a href="about.html">About</a>
+  
+</div>
+<!-- LOGIN -->
+<div id="loginOverlay">
+<div class="login-box">
+    
+<h3>User Login</h3>
+<input type="text" id="userName" placeholder="Enter Name" class="select-box">
+<input type="text" id="userPhone" placeholder="Enter Phone Number" class="select-box">
+<input type="email" id="userEmail" placeholder="Enter Email" class="select-box">
+
+<button onclick="loginUser()" class="search-btn">Continue</button>
+</div>
+</div>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+
+<div class="side-img">
+<img src="images (56).jpg">
+</div>
+
+<div class="logo-area">
+<h2>LandInfoTG</h2>
+<h4>ల్యాండ్ ఇన్ఫో తెలంగాణ</h4>
+<h4>लैंड इन्फो तेलंगाना</h4>
+<p class="tag">Unofficial Portal</p>
+</div>
+
+</nav>
+
+<div class="container">
+
+<h3>Encumbrance Certificate Search</h3>
+
+<select id="district" class="select-box"></select>
+<select id="mandal" class="select-box"></select>
+<select id="village" class="select-box"></select>
+<select id="survey" class="select-box" style="display:none;"></select>
+<select id="khata" class="select-box" style="display:none;"></select>
+
+<button class="search-btn" onclick="searchEC()">Search EC</button>
+
+<div id="resultBox" class="result"></div>
+
+</div>
+
+<!-- POPUP -->
+<div id="downloadPopup">
+<div class="popup-box">
+
+<h3 id="popupTitle">Downloading EC...</h3>
+
+<div class="loader" id="loader"></div>
+
+<div class="tick" id="tick">✔</div>
+
+<p id="popupText">
+Please wait while your EC is being generated.
+</p>
+
+<button onclick="closePopup()" class="search-btn">Close</button>
+
+</div>
+</div>
+
+<script>
+
+/* SAME YOUR JS — NO CHANGES */
+
+let allData=[];
+let currentUser=JSON.parse(localStorage.getItem("currentUser"))||null;
+
+window.onload=function(){
+allData=JSON.parse(localStorage.getItem("lands"))||[];
+if(currentUser){loginOverlay.style.display="none";}
+loadDistricts();
+};
+
+function loginUser(){
+let name=userName.value.trim();
+let phone=userPhone.value.trim();
+let email=userEmail.value.trim();
+
+if(!name||!phone||!email){
+alert("Please fill all details");
+return;
+}
+
+currentUser={name,phone,email};
+localStorage.setItem("currentUser",JSON.stringify(currentUser));
+loginOverlay.style.display="none";
+}
+
+function fillSelect(id,dataArray,placeholder){
+
+let select=document.getElementById(id);
+select.innerHTML=`<option value="">${placeholder}</option>`;
+
+let unique=[...new Set(dataArray)];
+
+unique.forEach(val=>{
+if(val){
+let opt=document.createElement("option");
+opt.value=val;
+opt.text=val;
+select.add(opt);
+}
+});
+}
+
+function loadDistricts(){
+let districts=allData.map(i=>i.district);
+fillSelect("district",districts,"Select District");
+}
+
+district.onchange=function(){
+
+let mandals=allData
+.filter(i=>i.district===this.value)
+.map(i=>i.mandal);
+
+fillSelect("mandal",mandals,"Select Mandal");
+fillSelect("village",[],"Select Village");
+
+survey.style.display="none";
+khata.style.display="none";
+};
+
+mandal.onchange=function(){
+
+let villages=allData
+.filter(i=>i.district===district.value && i.mandal===this.value)
+.map(i=>i.village);
+
+fillSelect("village",villages,"Select Village");
+
+survey.style.display="none";
+khata.style.display="none";
+};
+
+village.onchange=function(){
+
+let filtered=allData.filter(i=>
+i.district===district.value &&
+i.mandal===mandal.value &&
+i.village===this.value
+);
+
+let surveys=filtered.map(i=>i.survey);
+let khatas=filtered.map(i=>i.ppb);
+
+fillSelect("survey",surveys,"Select Survey No");
+fillSelect("khata",khatas,"Select Khata No");
+
+survey.style.display="block";
+khata.style.display="block";
+};
+
+function searchEC(){
+
+if(!district.value||!mandal.value||!village.value||!survey.value||!khata.value){
+alert("Please select all fields");
+return;
+}
+
+let result=allData.find(i=>
+i.district===district.value &&
+i.mandal===mandal.value &&
+i.village===village.value &&
+i.survey===survey.value &&
+i.ppb===khata.value
+);
+
+if(result){
+
+resultBox.innerHTML=`
+<h4>Encumbrance Certificate (EC)</h4>
+
+<p><b>Owner:</b> ${result.pattadar}</p>
+<p><b>Father:</b> ${result.father||'-'}</p>
+<p><b>Survey:</b> ${result.survey}</p>
+<p><b>Khata:</b> ${result.ppb}</p>
+<p><b>Total Extent:</b> ${result.acres} Acres</p>
+<p><b>Land Type:</b> ${result.landType}</p>
+<p><b>Land Status:</b> ${result.landStatus}</p>
+<p><b>Market Value:</b> ${result.marketValue}</p>
+
+<button class="search-btn"
+onclick="downloadEC('${result.district}','${result.survey}','${result.ppb}')">
+Download EC
+</button>
+`;
+
+}else{
+resultBox.innerHTML="<h4>No EC Record Found</h4>";
+}
+
+resultBox.style.display="block";
+}
+
+function downloadEC(districtVal,surveyVal,khataVal){
+
+if(!currentUser){
+loginOverlay.style.display="flex";
+return;
+}
+
+let users=JSON.parse(localStorage.getItem("users"))||[];
+
+users.push({
+...currentUser,
+type:"EC",
+district:districtVal,
+survey:surveyVal,
+khata:khataVal,
+date:new Date().toLocaleString()
+});
+
+localStorage.setItem("users",JSON.stringify(users));
+
+downloadPopup.style.display="flex";
+
+loader.style.display="block";
+tick.style.display="none";
+
+setTimeout(()=>{
+
+loader.style.display="none";
+tick.style.display="block";
+
+popupTitle.innerText="Download Complete";
+popupText.innerText="EC Sent Successfully";
+
+localStorage.removeItem("currentUser");
+currentUser=null;
+
+setTimeout(()=>{
+closePopup();
+},1500);
+
+},2000);
+}
+
+function closePopup(){
+downloadPopup.style.display="none";
+}
+
+/* ================= SIDEBAR TOGGLE ================= */
+
+const menuToggle = document.getElementById("menuToggle");
+const sidebar = document.getElementById("sidebar");
+const closeBtn = document.getElementById("closeBtn");
+
+menuToggle.addEventListener("click", function(){
+sidebar.style.right = "0";
+menuToggle.classList.add("hide"); // hide 3 lines
+});
+
+closeBtn.addEventListener("click", function(){
+sidebar.style.right = "-280px";
+menuToggle.classList.remove("hide"); // show again
+});
+
+</script>
+
+</body>
+</html>

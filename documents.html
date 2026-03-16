@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document Search - LandInfoTG</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+--forest-green: #2E4A23;
+--olive: #7A8450;
+--sand: #D9C7A1;
+--soft-white: #F8F4EF;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{
+background: var(--soft-white);
+min-height:100vh;
+}
+
+/* TOPBAR */
+
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+background: var(--forest-green);
+color: var(--soft-white);
+padding:8px 12px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+
+.side-img img{height:55px;}
+
+.logo-area{flex:1;text-align:center;}
+.logo-area h2{font-size:20px}
+.logo-area h4{font-size:11px;margin:2px 0}
+.tag{font-size:10px;opacity:0.8}
+
+/* CONTAINER */
+
+.container{
+max-width:800px;
+margin:50px auto;
+background: var(--soft-white);
+padding:40px;
+border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+h3{
+text-align:center;
+margin-bottom:25px;
+color: var(--forest-green);
+}
+
+.select-box{
+width:100%;
+padding:12px;
+margin:12px 0;
+border-radius:10px;
+border:1px solid var(--sand);
+background:white;
+}
+
+.search-btn{
+width:100%;
+padding:14px;
+margin-top:15px;
+background: var(--olive);
+color:white;
+border:none;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+}
+
+.search-btn:hover{
+background: var(--forest-green);
+}
+
+/* RESULT */
+
+.result{
+margin-top:30px;
+padding:25px;
+background: var(--sand);
+border-radius:15px;
+display:none;
+text-align:center;
+}
+
+.result img{
+max-width:100%;
+margin-top:15px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.no-record{
+color:red;
+font-weight:600;
+}
+
+/* SIDEBAR */
+
+#menuToggle{
+position:fixed;
+top:18px;
+right:20px;
+font-size:26px;
+background:var(--olive);
+color:white;
+padding:8px 14px;
+border-radius:8px;
+cursor:pointer;
+z-index:20000;
+}
+
+#menuToggle.hide{display:none;}
+
+#sidebar{
+position:fixed;
+top:0;
+right:-280px;
+width:260px;
+height:100%;
+background:var(--forest-green);
+padding-top:70px;
+transition:0.4s ease;
+display:flex;
+flex-direction:column;
+z-index:21000;
+}
+
+#sidebar a{
+color:white;
+text-decoration:none;
+padding:16px 25px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+font-size:15px;
+}
+
+#sidebar a:hover{
+background:var(--olive);
+padding-left:30px;
+}
+
+#closeBtn{
+position:absolute;
+top:18px;
+right:20px;
+font-size:22px;
+color:white;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="menuToggle">☰</div>
+
+<div id="sidebar">
+<div id="closeBtn">✖</div>
+
+<a href="index.html">Home</a>
+<a href="landsearch.html">Land Search</a>
+<a href="ror.html">ROR</a>
+<a href="ec.html">EC</a>
+<a href="documents.html">Documents</a>
+<a href="prohibited.html">Prohibited</a>
+<a href="about.html">About</a>
+</div>
+
+<nav class="topbar">
+<div class="side-img">
+<img src="images (56).jpg">
+</div>
+
+<div class="logo-area">
+<h2>LandInfoTG</h2>
+<h4>ల్యాండ్ ఇన్ఫో తెలంగాణ</h4>
+<h4>लैंड इन्फो तेलंगाना</h4>
+<p class="tag">Unofficial Portal</p>
+</div>
+</nav>
+
+<div class="container">
+
+<h3>Search Document</h3>
+
+<select id="district" class="select-box"></select>
+
+<input type="text" id="documentId"
+placeholder="Enter Document ID"
+class="select-box">
+
+<button class="search-btn" onclick="searchDocument()">Search Document</button>
+
+<div id="resultBox" class="result"></div>
+
+</div>
+
+<script>
+
+let allData=[];
+
+window.onload=function(){
+allData=JSON.parse(localStorage.getItem("lands"))||[];
+loadDistricts();
+};
+
+function loadDistricts(){
+let set=new Set();
+allData.forEach(i=>{
+if(i.district) set.add(i.district);
+});
+fillSelect("district",set,"Select District");
+}
+
+function fillSelect(id,data,placeholder){
+let select=document.getElementById(id);
+select.innerHTML=`<option value="">${placeholder}</option>`;
+data.forEach(val=>{
+let opt=document.createElement("option");
+opt.value=val;
+opt.text=val;
+select.add(opt);
+});
+}
+
+function searchDocument(){
+
+let district=document.getElementById("district").value;
+let docId=document.getElementById("documentId").value.trim();
+
+if(!district || !docId){
+alert("Please fill all fields");
+return;
+}
+
+let result = allData.find(item =>
+item.district===district &&
+item.documentId===docId
+);
+
+let resultBox=document.getElementById("resultBox");
+
+if(result){
+
+resultBox.innerHTML=`
+<h3>Document Found ✅</h3>
+${result.documentImage ? `<img src="${result.documentImage}">` : "<p class='no-record'>Image Not Available</p>"}
+`;
+
+}else{
+
+resultBox.innerHTML=`<p class="no-record">No Matching Document Found ❌</p>`;
+
+}
+
+resultBox.style.display="block";
+}
+
+/* SIDEBAR */
+
+const menuToggle=document.getElementById("menuToggle");
+const sidebar=document.getElementById("sidebar");
+const closeBtn=document.getElementById("closeBtn");
+
+menuToggle.onclick=function(){
+sidebar.style.right="0";
+menuToggle.classList.add("hide");
+}
+
+closeBtn.onclick=function(){
+sidebar.style.right="-280px";
+menuToggle.classList.remove("hide");
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prohibited Lands - LandInfoTG</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+--forest-green: #2E4A23;
+--olive: #7A8450;
+--sand: #D9C7A1;
+--soft-white: #F8F4EF;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{
+background: var(--soft-white);
+min-height:100vh;
+}
+
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+background: var(--forest-green);
+color: var(--soft-white);
+padding:8px 12px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+
+.side-img img,.right-section img{
+height:55px;
+}
+
+.logo-area{
+flex:1;
+text-align:center;
+}
+
+.logo-area h2{font-size:20px;margin:0}
+.logo-area h4{font-size:11px;margin:2px 0}
+.tag{font-size:10px;opacity:0.8}
+
+.container{
+max-width:900px;
+margin:50px auto;
+background: var(--soft-white);
+padding:40px;
+border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+h3{
+text-align:center;
+margin-bottom:25px;
+color: var(--forest-green);
+}
+
+.select-box{
+width:100%;
+padding:12px;
+margin:12px 0;
+border-radius:10px;
+border:1px solid var(--sand);
+background:white;
+}
+
+.search-btn{
+width:100%;
+padding:14px;
+margin-top:15px;
+background: var(--olive);
+color:white;
+border:none;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+}
+
+.search-btn:hover{
+background: var(--forest-green);
+}
+/* ================= RIGHT TOGGLE ================= */
+
+#menuToggle{
+position:fixed;
+top:15px;
+right:15px;
+font-size:24px;
+background:var(--olive);
+color:white;
+padding:10px 14px;
+border-radius:8px;
+cursor:pointer;
+z-index:10001;
+box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* ================= SIDEBAR ================= */
+
+#sidebar{
+position:fixed;
+top:0;
+right:-280px;
+width:260px;
+height:100%;
+background:var(--forest-green);
+padding-top:70px;
+transition:0.4s ease;
+z-index:10000;
+display:flex;
+flex-direction:column;
+box-shadow:-5px 0 20px rgba(0,0,0,0.3);
+}
+
+#sidebar a{
+color:white;
+text-decoration:none;
+padding:16px 22px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+font-size:15px;
+transition:0.3s;
+}
+
+#sidebar a:hover{
+background:var(--olive);
+padding-left:30px;
+}
+
+/* CLOSE BUTTON CLEARLY VISIBLE */
+
+#closeBtn{
+position:absolute;
+top:18px;
+right:18px;
+font-size:22px;
+background:var(--olive);
+color:white;
+width:35px;
+height:35px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+cursor:pointer;
+box-shadow:0 3px 10px rgba(0,0,0,0.4);
+}
+.result{
+margin-top:30px;
+padding:25px;
+background: var(--sand);
+border-radius:15px;
+display:none;
+text-align:center;
+}
+
+.result img{
+max-width:100%;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+margin-top:15px;
+}
+
+.no-record{
+color:green;
+font-weight:600;
+font-size:16px;
+}
+
+.warning{
+color:red;
+font-weight:700;
+font-size:18px;
+}
+/* ================= TOGGLE BUTTON ================= */
+
+#menuToggle{
+position:fixed;
+top:20px;
+right:20px;
+font-size:26px;
+background:var(--olive);
+color:white;
+padding:8px 14px;
+border-radius:8px;
+cursor:pointer;
+z-index:11000;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+/* Hide toggle when sidebar open */
+#menuToggle.hide{
+display:none;
+}
+
+/* ================= SIDEBAR ================= */
+
+#sidebar{
+position:fixed;
+top:0;
+right:-270px;
+width:260px;
+height:100%;
+background:var(--forest-green);
+padding-top:70px;
+transition:0.4s ease;
+display:flex;
+flex-direction:column;
+z-index:12000;
+box-shadow:-5px 0 20px rgba(0,0,0,0.3);
+}
+
+#sidebar a{
+color:white;
+text-decoration:none;
+padding:15px 25px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+font-size:15px;
+transition:0.3s;
+}
+
+#sidebar a:hover{
+background:var(--olive);
+padding-left:30px;
+}
+
+/* CLOSE BUTTON */
+#closeBtn{
+position:absolute;
+top:20px;
+right:20px;
+font-size:22px;
+color:white;
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+<!-- RIGHT TOGGLE BUTTON -->
+<div id="menuToggle">☰</div>
+
+<!-- RIGHT SIDEBAR -->
+<div id="sidebar">
+  <div id="closeBtn">✖</div>
+
+  <a href="index.html">Home</a>
+  <a href="landsearch.html">Land Search</a>
+  <a href="ror.html">ROR</a>
+  <a href="ec.html">EC</a>
+  <a href="documents.html">Documents</a>
+  <a href="prohibited.html">Prohibited</a>
+  <a href="about.html">About</a>
+</div>
+
+<nav class="topbar">
+<div class="side-img">
+<img src="images (56).jpg">
+</div>
+
+<div class="logo-area">
+<h2>LandInfoTG</h2>
+<h4>ల్యాండ్ ఇన్ఫో తెలంగాణ</h4>
+<h4>लैंड इन्फो तेलंगाना</h4>
+<p class="tag">Unofficial Portal</p>
+</div>
+
+</nav>
+
+<div class="container">
+
+<h3>Prohibited Land Check</h3>
+
+<select id="district" class="select-box"></select>
+<select id="mandal" class="select-box"></select>
+<select id="village" class="select-box"></select>
+
+<input type="text" id="survey" 
+placeholder="Enter Survey Number"
+class="select-box">
+
+<button class="search-btn" onclick="searchProhibited()">Check Status</button>
+
+<div id="resultBox" class="result"></div>
+
+</div>
+
+<script>
+
+/* LOAD DISTRICTS */
+function loadDistricts(){
+
+let lands = JSON.parse(localStorage.getItem("lands")) || [];
+let districtSet = new Set();
+
+lands.forEach(item=>{
+if(item.district){
+districtSet.add(item.district.trim());
+}
+});
+
+fillSelect("district",[...districtSet],"Select District");
+}
+
+function fillSelect(id,data,placeholder){
+let select=document.getElementById(id);
+select.innerHTML=`<option value="">${placeholder}</option>`;
+
+data.forEach(val=>{
+let opt=document.createElement("option");
+opt.value=val;
+opt.text=val;
+select.add(opt);
+});
+}
+
+window.onload=loadDistricts;
+
+/* DISTRICT CHANGE */
+document.getElementById("district").addEventListener("change", function(){
+
+let lands = JSON.parse(localStorage.getItem("lands")) || [];
+let mandalSet=new Set();
+
+lands.forEach(item=>{
+if(item.district && item.district.trim()===this.value.trim()){
+mandalSet.add(item.mandal.trim());
+}
+});
+
+fillSelect("mandal",[...mandalSet],"Select Mandal");
+fillSelect("village",[],"Select Village");
+});
+
+/* MANDAL CHANGE */
+document.getElementById("mandal").addEventListener("change", function(){
+
+let lands = JSON.parse(localStorage.getItem("lands")) || [];
+let villageSet=new Set();
+
+lands.forEach(item=>{
+if(
+item.district && item.district.trim()===district.value.trim() &&
+item.mandal && item.mandal.trim()===this.value.trim()
+){
+villageSet.add(item.village.trim());
+}
+});
+
+fillSelect("village",[...villageSet],"Select Village");
+});
+
+/* SEARCH PROHIBITED */
+function searchProhibited(){
+
+let districtVal=document.getElementById("district").value.trim();
+let mandalVal=document.getElementById("mandal").value.trim();
+let villageVal=document.getElementById("village").value.trim();
+let surveyVal=document.getElementById("survey").value.trim();
+
+if(!districtVal||!mandalVal||!villageVal||!surveyVal){
+alert("Please fill all fields");
+return;
+}
+
+let lands = JSON.parse(localStorage.getItem("lands")) || [];
+
+let result = lands.find(item =>
+
+item.district && item.district.trim()===districtVal &&
+item.mandal && item.mandal.trim()===mandalVal &&
+item.village && item.village.trim()===villageVal &&
+item.survey && item.survey.toString().trim()===surveyVal.toString().trim()
+
+);
+
+let resultBox=document.getElementById("resultBox");
+
+if(result){
+
+/* IMPORTANT: Only surveyImage load avvali */
+if(result.surveyImage && result.surveyImage !== ""){
+
+resultBox.innerHTML=`
+<h3 style="color:red;">⚠ Prohibited Land Found</h3>
+<img src="${result.surveyImage}">
+`;
+
+}else{
+
+resultBox.innerHTML=`
+<h3 style="color:red;">⚠ Prohibited Record Found</h3>
+<p>No Survey Image Uploaded</p>
+`;
+
+}
+
+}else{
+
+resultBox.innerHTML=`
+<h3 style="color:green;">✅ No Prohibited Record Found</h3>
+`;
+
+}
+
+resultBox.style.display="block";
+}
+
+/* ================= SIDEBAR TOGGLE ================= */
+
+const menuToggle = document.getElementById("menuToggle");
+const sidebar = document.getElementById("sidebar");
+const closeBtn = document.getElementById("closeBtn");
+
+menuToggle.addEventListener("click", function(){
+sidebar.style.right = "0";
+menuToggle.classList.add("hide"); // hide 3 lines
+});
+
+closeBtn.addEventListener("click", function(){
+sidebar.style.right = "-270px";
+menuToggle.classList.remove("hide"); // show 3 lines again
+});
+</script>
+
+</body>
+</html>

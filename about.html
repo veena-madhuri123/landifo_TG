@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | LandInfoTG</title>
+
+<style>
+
+/* THEME COLORS */
+:root{
+--forest-green:#2E4A23;
+--olive:#7A8450;
+--sand:#D9C7A1;
+--soft-white:#F8F4EF;
+}
+
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:var(--soft-white);
+color:#333;
+}
+
+/* HEADER */
+header{
+background:var(--forest-green);
+padding:22px;
+text-align:center;
+}
+
+header h1{
+color:#fff;
+margin:0;
+font-size:32px;
+}
+
+/* MAIN */
+.container{
+width:85%;
+margin:auto;
+padding:40px 0;
+}
+
+.main-heading{
+text-align:center;
+color:var(--forest-green);
+font-size:34px;
+}
+
+.description{
+text-align:center;
+font-size:18px;
+margin:20px 0 50px 0;
+line-height:1.8;
+}
+
+/* ZIGZAG BOXES */
+.page-section{
+display:flex;
+align-items:center;
+margin:40px 0;
+cursor:pointer;
+transition:0.4s ease;
+}
+
+.page-section:nth-child(even){
+flex-direction:row-reverse;
+}
+
+.page-content{
+flex:1;
+padding:30px;
+border-left:8px solid var(--olive);
+background:var(--sand);
+border-radius:12px;
+transition:0.3s;
+}
+
+.page-section:nth-child(even) .page-content{
+border-left:none;
+border-right:8px solid var(--olive);
+}
+
+.page-content:hover{
+transform:translateY(-6px);
+box-shadow:0 6px 20px rgba(0,0,0,0.1);
+}
+
+.page-content h3{
+color:var(--forest-green);
+margin-bottom:12px;
+}
+
+.page-content p{
+line-height:1.7;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+display:flex;
+justify-content:center;
+align-items:center;
+visibility:hidden;
+opacity:0;
+transition:0.3s;
+}
+
+.modal.active{
+visibility:visible;
+opacity:1;
+}
+
+.modal-box{
+background:var(--soft-white);
+width:450px;
+padding:30px;
+border-radius:15px;
+animation:fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn{
+from{transform:translateY(-40px); opacity:0;}
+to{transform:translateY(0); opacity:1;}
+}
+
+.modal-box h2{
+color:var(--forest-green);
+}
+
+.close-btn{
+margin-top:20px;
+padding:8px 20px;
+background:var(--olive);
+color:#fff;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+/* FOOTER */
+footer{
+background:var(--forest-green);
+color:#fff;
+text-align:center;
+padding:15px;
+margin-top:50px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>LandInfoTG</h1>
+</header>
+
+<div class="container">
+
+<h2 class="main-heading">🏡 Welcome to LandInfoTG</h2>
+
+<p class="description">
+LandInfoTG is a reliable real estate information platform built to simplify land verification and property research.
+It provides accurate land records, legal status checking, and ownership details in one place.
+Our goal is to make property transactions safer, faster, and transparent for everyone.
+</p>
+
+<!-- EC -->
+<div class="page-section" onclick="openModal('ec')">
+<div class="page-content">
+<h3>📜 EC Page</h3>
+<p>
+The EC (Encumbrance Certificate) page allows users to verify if a property has any loans or liabilities.<br>
+It shows registered transactions related to the property.<br>
+Users can confirm legal clarity before buying or selling.<br>
+It ensures safe and secure property dealings.<br>
+This page reduces financial and legal risks significantly.
+</p>
+</div>
+</div>
+
+<!-- ROR -->
+<div class="page-section" onclick="openModal('ror')">
+<div class="page-content">
+<h3>📖 ROR Page</h3>
+<p>
+The ROR (Record of Rights) page provides complete ownership details.<br>
+It displays land survey number and classification.<br>
+Users can check land history and mutation records.<br>
+It confirms rightful property holders.<br>
+This ensures trust and transparency in transactions.
+</p>
+</div>
+</div>
+
+<!-- PROHIBITED -->
+<div class="page-section" onclick="openModal('prohibited')">
+<div class="page-content">
+<h3>🚫 Prohibited Page</h3>
+<p>
+This page helps users check restricted properties.<br>
+It identifies government-blocked lands.<br>
+Prevents illegal or disputed purchases.<br>
+Protects buyers from legal complications.<br>
+Ensures compliance with regulations.
+</p>
+</div>
+</div>
+
+<!-- SEARCH -->
+<div class="page-section" onclick="openModal('search')">
+<div class="page-content">
+<h3>🔍 Land Search Page</h3>
+<p>
+Search land records using survey number or district.<br>
+Quick access to property details.<br>
+Simple and user-friendly interface.<br>
+Saves time during property verification.<br>
+Improves efficiency in land research.
+</p>
+</div>
+</div>
+
+<!-- DOCUMENTS -->
+<div class="page-section" onclick="openModal('documents')">
+<div class="page-content">
+<h3>📂 Documents Page</h3>
+<p>
+Access essential land-related documents.<br>
+Download required certificates easily.<br>
+Supports verification and registration process.<br>
+Keeps records organized in one place.<br>
+Makes documentation simple and fast.
+</p>
+</div>
+</div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-box">
+<h2 id="modal-title"></h2>
+<p id="modal-text"></p>
+<button class="close-btn" onclick="closeModal()">Close</button>
+</div>
+</div>
+
+<footer>
+© 2026 LandInfoTG | All Rights Reserved
+</footer>
+
+<script>
+
+function openModal(page){
+
+const modal=document.getElementById("modal");
+const title=document.getElementById("modal-title");
+const text=document.getElementById("modal-text");
+
+if(page==="ec"){
+title.innerHTML="📜 EC Page Details";
+text.innerHTML="Encumbrance Certificate ensures property is free from financial liabilities and legal dues before purchase.";
+}
+
+if(page==="ror"){
+title.innerHTML="📖 ROR Page Details";
+text.innerHTML="Record of Rights confirms ownership, land type, and mutation history for transparency.";
+}
+
+if(page==="prohibited"){
+title.innerHTML="🚫 Prohibited Page Details";
+text.innerHTML="Check if land falls under restricted government or legal control before transactions.";
+}
+
+if(page==="search"){
+title.innerHTML="🔍 Land Search Page Details";
+text.innerHTML="Quick property lookup using survey numbers and district details.";
+}
+
+if(page==="documents"){
+title.innerHTML="📂 Documents Page Details";
+text.innerHTML="Access and download important land certificates and legal documents.";
+}
+
+modal.classList.add("active");
+}
+
+function closeModal(){
+document.getElementById("modal").classList.remove("active");
+}
+
+window.onclick=function(e){
+if(e.target==document.getElementById("modal")){
+closeModal();
+}
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - LandInfoTG</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:linear-gradient(135deg,#e3f7ec,#f4f7f6);min-height:100vh;}
+
+nav{
+background:#0f7a32;color:white;padding:18px 40px;
+display:flex;justify-content:space-between;align-items:center;
+box-shadow:0 4px 15px rgba(0,0,0,0.15);
+position:relative;
+}
+
+nav h2{font-weight:700;}
+
+a{color:white;text-decoration:none;}
+
+/* BACK BUTTON */
+.back-arrow{
+position:absolute;
+left:15px;
+font-size:22px;
+cursor:pointer;
+font-weight:600;
+}
+
+.back-arrow:hover{
+opacity:0.8;
+}
+
+.container{
+max-width:1200px;margin:40px auto;background:white;
+padding:40px;border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;margin-bottom:20px;
+}
+
+input,select{
+padding:10px;border-radius:10px;border:1px solid #ccc;
+font-size:14px;transition:0.3s;
+}
+
+input:focus,select:focus{
+border-color:#0f7a32;
+box-shadow:0 0 8px rgba(15,122,50,0.3);
+outline:none;
+}
+
+.save-btn{
+margin-top:10px;width:100%;padding:14px;
+background:#0f7a32;color:white;border:none;
+border-radius:12px;font-size:15px;cursor:pointer;
+}
+
+.table-card{
+margin-top:40px;background:white;padding:25px;
+border-radius:18px;box-shadow:0 15px 35px rgba(0,0,0,0.08);
+}
+
+.table-wrapper{
+overflow-x:auto;max-height:400px;overflow-y:auto;
+}
+
+table{
+width:100%;border-collapse:collapse;min-width:900px;
+}
+
+thead{
+position:sticky;top:0;background:#0f7a32;color:white;
+}
+
+th,td{padding:12px;font-size:14px;border-bottom:1px solid #eee;}
+tbody tr:hover{background:#f3fff8;}
+
+.delete-btn{
+background:#ff4d4d;color:white;border:none;
+padding:6px 12px;border-radius:8px;cursor:pointer;
+}
+
+img.preview{
+max-width:120px;border-radius:8px;margin-top:10px;
+display:none;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<span class="back-arrow" onclick="goBack()">←</span>
+<h2>Admin Dashboard</h2>
+<a href="users.html">users</a>
+</nav>
+
+<div class="container">
+
+<h3 style="margin-bottom:20px;color:#0f7a32;">Add Land Record</h3>
+
+<div class="form-grid">
+
+<input placeholder="District" id="district">
+<input placeholder="Mandal" id="mandal">
+<input placeholder="Village" id="village">
+<input placeholder="Survey No" id="survey">
+<input placeholder="Pattadar Name" id="pattadar">
+<input placeholder="Father / Husband Name" id="father">
+<input placeholder="PPB Number (Khata)" id="ppb">
+
+<select id="kyc">
+<option value="">KYC Status</option>
+<option>Verified</option>
+<option>Pending</option>
+<option>Rejected</option>
+</select>
+
+<input placeholder="Total Acres" id="acres">
+<input placeholder="Land Status (Clear / Dispute)" id="landStatus">
+<input placeholder="Nature of Land" id="nature">
+<input placeholder="Qualification of Land" id="qualification">
+
+<select id="landType">
+<option value="">Land Type</option>
+<option>Agriculture</option>
+<option>Residential</option>
+<option>Commercial</option>
+</select>
+
+<input placeholder="Market Value" id="marketValue">
+
+<input type="file" id="surveyImage" accept="image/*">
+<img id="surveyPreview" class="preview">
+
+<input type="file" id="documentImage" accept="image/*">
+<img id="documentPreview" class="preview">
+
+<input placeholder="Document ID" id="documentId">
+
+</div>
+
+<button class="save-btn" onclick="saveLand()">Save Record</button>
+
+<div class="table-card">
+<h3 style="margin-bottom:20px;color:#0f7a32;">Saved Records</h3>
+
+<div style="margin-bottom:15px;">
+<input type="text" id="searchInput"
+placeholder="Search by District, Village, Owner, Survey, PPB..."
+style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;"
+onkeyup="filterTable()">
+</div>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>District</th>
+<th>Mandal</th>
+<th>Village</th>
+<th>Survey</th>
+<th>Owner</th>
+<th>Acres</th>
+<th>Value</th>
+<th>Document ID</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="dataTable"></tbody>
+</table>
+</div>
+</div>
+
+<div style="margin-top:40px;">
+<h3 style="margin-bottom:15px;color:#0f7a32;">Update Hero Notification</h3>
+
+<textarea id="adminNotice"
+placeholder="Enter notification message..."
+style="width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;min-height:100px;"></textarea>
+
+<button onclick="saveNotice()"
+style="margin-top:10px;padding:10px 18px;background:#0f7a32;color:white;border:none;border-radius:8px;cursor:pointer;">
+Save Notification
+</button>
+</div>
+
+</div>
+
+<script>
+
+function goBack(){
+window.history.back();
+}
+
+/* REST OF YOUR ORIGINAL JS UNCHANGED */
+
+window.addEventListener("load", function(){
+loadData();
+let savedNotice = localStorage.getItem("heroNotice");
+if(savedNotice){
+document.getElementById("adminNotice").value = savedNotice;
+}
+});
+
+function saveNotice(){
+let notice = document.getElementById("adminNotice").value.trim();
+if(!notice){
+alert("Please enter notification text");
+return;
+}
+localStorage.setItem("heroNotice", notice);
+alert("Notification Updated Successfully ✅");
+}
+
+let surveyImageData="";
+let documentImageData="";
+
+document.getElementById("surveyImage").addEventListener("change", function(e){
+let file=e.target.files[0];
+if(!file) return;
+let reader=new FileReader();
+reader.onload=function(event){
+surveyImageData=event.target.result;
+surveyPreview.src=surveyImageData;
+surveyPreview.style.display="block";
+};
+reader.readAsDataURL(file);
+});
+
+document.getElementById("documentImage").addEventListener("change", function(e){
+let file=e.target.files[0];
+if(!file) return;
+let reader=new FileReader();
+reader.onload=function(event){
+documentImageData=event.target.result;
+documentPreview.src=documentImageData;
+documentPreview.style.display="block";
+};
+reader.readAsDataURL(file);
+});
+
+function filterTable(){
+let input = document.getElementById("searchInput").value.toLowerCase();
+let rows = document.querySelectorAll("#dataTable tr");
+rows.forEach(row=>{
+row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
+});
+}
+
+function saveLand(){
+let land={
+district:district.value,
+mandal:mandal.value,
+village:village.value,
+survey:survey.value,
+pattadar:pattadar.value,
+father:father.value,
+ppb:ppb.value,
+kyc:kyc.value,
+acres:acres.value,
+landStatus:landStatus.value,
+nature:nature.value,
+qualification:qualification.value,
+landType:landType.value,
+marketValue:marketValue.value,
+documentId:documentId.value,
+surveyImage:surveyImageData,
+documentImage:documentImageData
+};
+
+if(!land.district||!land.mandal||!land.village||!land.survey){
+alert("Please fill required fields");
+return;
+}
+
+let lands=JSON.parse(localStorage.getItem("lands"))||[];
+lands.push(land);
+localStorage.setItem("lands",JSON.stringify(lands));
+
+alert("Record Saved Successfully ✅");
+
+clearForm();
+loadData();
+}
+
+function loadData(){
+let lands=JSON.parse(localStorage.getItem("lands"))||[];
+let table=document.getElementById("dataTable");
+table.innerHTML="";
+
+lands.forEach((l,i)=>{
+table.innerHTML+=`
+<tr>
+<td>${l.district}</td>
+<td>${l.mandal}</td>
+<td>${l.village}</td>
+<td>${l.survey}</td>
+<td>${l.pattadar}</td>
+<td>${l.acres}</td>
+<td>${l.marketValue}</td>
+<td>${l.documentId || "-"}</td>
+<td><button class="delete-btn" onclick="deleteLand(${i})">Delete</button></td>
+</tr>`;
+});
+}
+
+function deleteLand(i){
+let lands=JSON.parse(localStorage.getItem("lands"));
+lands.splice(i,1);
+localStorage.setItem("lands",JSON.stringify(lands));
+loadData();
+}
+
+function clearForm(){
+document.querySelectorAll("input").forEach(i=>i.value="");
+document.querySelectorAll("select").forEach(s=>s.value="");
+surveyImageData="";
+documentImageData="";
+surveyPreview.style.display="none";
+documentPreview.style.display="none";
+}
+
+loadData();
+
+</script>
+
+</body>
+</html>
